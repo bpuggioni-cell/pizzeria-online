@@ -14,3 +14,10 @@ Estructura y Arquitectura
   - `sqlc.yaml`: Configuración de generación de código Go.
   - `internal/db/`: Código Go autogenerado (`models.go`, `db.go`, `queries.sql.go`) y tests de integración (`db_test.go`).
   - `test.sh` y `Makefile`: Automatización de entorno en Docker y ejecución de tests.
+
+## Ejecución de Tests
+
+Para ejecutar el ciclo de pruebas automatizado (levantar contenedor PostgreSQL, aplicar schema, generar código, ejecutar `go test` y limpiar el entorno):
+
+```bash
+make test
