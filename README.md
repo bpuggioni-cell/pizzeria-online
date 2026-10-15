@@ -1,23 +1,18 @@
-Pizzería - TP2: Capa de Persistencia
+# Pizzería API REST - TP3
 
-Este repositorio contiene la implementación de la capa de persistencia para la aplicación de la Pizzería, utilizando PostgreSQL y sqlc para la generación de código Go fuertemente tipado.
+API REST desarrollada en Go (`net/http`) conectada a PostgreSQL mediante `sqlc` para la gestión de productos (Pizzas) y órdenes de compra (Pedidos).
 
-Estructura y Arquitectura
+## Requisitos Previos
 
-- Base de Datos:
-  -`pizzas`: Menú con detalles de productos, precios y disponibilidad.
-  -`pedidos`: Almacena la orden solicitada junto a los datos de entrega del cliente (`cliente_nombre`, `cliente_direccion`, `cliente_telefono`), garantizando el flujo de pedidos sin necesidad de registro previo.
+* **Go** (versión 1.22 o superior)
+* **Docker** y **Docker Compose**
+* **HURL** (para la suite de integración de pruebas HTTP)
+* **sqlc** (opcional, para regenerar queries)
 
-- Archivos Clave:
-  - `schema.sql`: Sentencias DDL para la creación de tablas.
-  - `queries.sql`: Consultas SQL con anotaciones para `sqlc`.
-  - `sqlc.yaml`: Configuración de generación de código Go.
-  - `internal/db/`: Código Go autogenerado (`models.go`, `db.go`, `queries.sql.go`) y tests de integración (`db_test.go`).
-  - `test.sh` y `Makefile`: Automatización de entorno en Docker y ejecución de tests.
+## Ejecución Automatizada de Pruebas (Instrucción de Entrega)
 
-## Ejecución de Tests
-
-Para ejecutar el ciclo de pruebas automatizado (levantar contenedor PostgreSQL, aplicar schema, generar código, ejecutar `go test` y limpiar el entorno):
+Para probar el proyecto completo desde cero (setup de base de datos, ejecución de sqlc, compilación, tests HURL y cleanup final), clonar el repositorio e ingresar a la rama `tp3`:
 
 ```bash
-make test
+git checkout tp3
+make test-api
