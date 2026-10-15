@@ -11,10 +11,11 @@ WHERE id = $1;
 SELECT * FROM pizzas 
 ORDER BY id ASC;
 
--- name: UpdatePizza :exec
+-- name: UpdatePizza :one
 UPDATE pizzas 
 SET nombre = $2, descripcion = $3, precio = $4, disponible = $5 
-WHERE id = $1;
+WHERE id = $1
+RETURNING *;
 
 -- name: DeletePizza :exec
 DELETE FROM pizzas 
@@ -35,10 +36,11 @@ WHERE id = $1;
 SELECT * FROM pedidos 
 ORDER BY created_at DESC;
 
--- name: UpdateEstadoPedido :exec
-UPDATE pedidos 
-SET estado = $2 
-WHERE id = $1;
+-- name: UpdatePedidoState :one
+UPDATE pedidos
+SET estado = $2
+WHERE id = $1
+RETURNING *;
 
 -- name: DeletePedido :exec
 DELETE FROM pedidos 

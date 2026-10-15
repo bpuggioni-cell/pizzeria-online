@@ -217,26 +217,40 @@ func (q *Queries) ListPizzas(ctx context.Context) ([]Pizza, error) {
 	return items, nil
 }
 
-const updateEstadoPedido = `-- name: UpdateEstadoPedido :exec
-UPDATE pedidos 
-SET estado = $2 
+const updatePedidoState = `-- name: UpdatePedidoState :one
+UPDATE pedidos
+SET estado = $2
 WHERE id = $1
+RETURNING id, cliente_nombre, cliente_direccion, cliente_telefono, pizza_id, cantidad, total, estado, created_at
 `
 
-type UpdateEstadoPedidoParams struct {
+type UpdatePedidoStateParams struct {
 	ID     int32
 	Estado sql.NullString
 }
 
-func (q *Queries) UpdateEstadoPedido(ctx context.Context, arg UpdateEstadoPedidoParams) error {
-	_, err := q.db.ExecContext(ctx, updateEstadoPedido, arg.ID, arg.Estado)
-	return err
+func (q *Queries) UpdatePedidoState(ctx context.Context, arg UpdatePedidoStateParams) (Pedido, error) {
+	row := q.db.QueryRowContext(ctx, updatePedidoState, arg.ID, arg.Estado)
+	var i Pedido
+	err := row.Scan(
+		&i.ID,
+		&i.ClienteNombre,
+		&i.ClienteDireccion,
+		&i.ClienteTelefono,
+		&i.PizzaID,
+		&i.Cantidad,
+		&i.Total,
+		&i.Estado,
+		&i.CreatedAt,
+	)
+	return i, err
 }
 
-const updatePizza = `-- name: UpdatePizza :exec
+const updatePizza = `-- name: UpdatePizza :one
 UPDATE pizzas 
 SET nombre = $2, descripcion = $3, precio = $4, disponible = $5 
 WHERE id = $1
+RETURNING id, nombre, descripcion, precio, disponible, created_at
 `
 
 type UpdatePizzaParams struct {
@@ -247,13 +261,22 @@ type UpdatePizzaParams struct {
 	Disponible  sql.NullBool
 }
 
-func (q *Queries) UpdatePizza(ctx context.Context, arg UpdatePizzaParams) error {
-	_, err := q.db.ExecContext(ctx, updatePizza,
+func (q *Queries) UpdatePizza(ctx context.Context, arg UpdatePizzaParams) (Pizza, error) {
+	row := q.db.QueryRowContext(ctx, updatePizza,
 		arg.ID,
 		arg.Nombre,
 		arg.Descripcion,
 		arg.Precio,
 		arg.Disponible,
 	)
-	return err
+	var i Pizza
+	err := row.Scan(
+		&i.ID,
+		&i.Nombre,
+		&i.Descripcion,
+		&i.Precio,
+		&i.Disponible,
+		&i.CreatedAt,
+	)
+	return i, err
 }
