@@ -4,7 +4,6 @@ set -e
 CONTAINER_NAME="postgres-pizzeria-test"
 
 echo "=== [1/5] Limpiando procesos y contenedores previos ==="
-pkill -f "pizzeria-api" || true
 docker stop $CONTAINER_NAME 2>/dev/null || true
 docker rm -f $CONTAINER_NAME 2>/dev/null || true
 
@@ -45,11 +44,15 @@ sleep 3
 # Función de limpieza al finalizar
 cleanup() {
     echo "=== Tareas posteriores: Limpiando procesos y contenedor ==="
-    if [ -n "$APP_PID" ]; then
+  if [ -n "$APP_PID" ] && kill -0 $APP_PID 2>/dev/null; then
         kill $APP_PID 2>/dev/null || true
+        wait $APP_PID 2>/dev/null || true
     fi
+    
+    # Detener y eliminar contenedor y limpiar volúmenes anónimos asociados
     docker stop $CONTAINER_NAME 2>/dev/null || true
     docker rm -f $CONTAINER_NAME 2>/dev/null || true
+    docker volume prune -f &>/dev/null || true
     rm -f pizzeria-api
     echo "=== Fin de la limpieza ==="
 }
