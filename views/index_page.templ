@@ -1,0 +1,12 @@
+package views
+
+import "tpmod/internal/db"
+
+templ IndexPage(pizzas []db.Pizza) {
+    @Layout("Gestión de Pizzería - SSR") {
+        <div style="display: flex; flex-direction: column; gap: 2rem; margin-top: 2rem;">
+            @EntityForm()
+            @EntityList(pizzas)
+        </div>
+    }
+}

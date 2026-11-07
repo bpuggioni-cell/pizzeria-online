@@ -1,0 +1,26 @@
+package views
+
+templ EntityForm() {
+    <section>
+        <h2>Registrar Nueva Pizza</h2>
+        <form action="/pizzas" method="POST">
+            <fieldset>
+                <label for="nombre">
+                    Nombre de la Pizza
+                    <input type="text" id="nombre" name="nombre" placeholder="Ej: Muzzarella Especial" required/>
+                </label>
+                
+                <label for="descripcion">
+                    Descripción
+                    <input type="text" id="descripcion" name="descripcion" placeholder="Ej: Salsa, muzzarella, morrones y aceitunas"/>
+                </label>
+
+                <label for="precio">
+                    Precio ($)
+                    <input type="number" id="precio" name="precio" step="0.01" placeholder="Ej: 9500" required/>
+                </label>
+            </fieldset>
+            <button type="submit">Guardar Pizza</button>
+        </form>
+    </section>
+}

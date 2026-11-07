@@ -1,18 +1,15 @@
-# Pizzería API REST - TP3
+# Sistema de Gestión de Pizzería - SSR (Trabajo Práctico 5)
 
-API REST desarrollada en Go (`net/http`) conectada a PostgreSQL mediante `sqlc` para la gestión de productos (Pizzas) y órdenes de compra (Pedidos).
+Aplicación web desarrollada en **Go** utilizando **Server-Side Rendering (SSR)** con componentes **`templ`**, estilos basados en **Pico.css**, persistencia de datos mediante **PostgreSQL** y mapeo tipado con **`sqlc`**. Implementa estrictamente el patrón **Post/Redirect/Get (PRG)**.
 
 ## Requisitos Previos
-
 * **Go** (versión 1.22 o superior)
-* **Docker** y **Docker Compose**
-* **HURL** (para la suite de integración de pruebas HTTP)
-* **sqlc** (opcional, para regenerar queries)
+* **Docker y Docker Compose** (para el manejo automatizado de la base de datos)
+* Herramienta **`templ`** instalada en el sistema (`go install github.com/a-h/templ/cmd/templ@latest`)
 
-## Ejecución Automatizada de Pruebas (Instrucción de Entrega)
+## Instrucciones de Ejecución
 
-Para probar el proyecto completo desde cero (setup de base de datos, ejecución de sqlc, compilación, tests HURL y cleanup final), clonar el repositorio e ingresar a la rama `tp3`:
+Para clonar, preparar el entorno de base de datos, compilar y ejecutar la aplicación de forma totalmente automatizada mediante el Makefile, ejecute el siguiente comando en la raíz del proyecto:
 
 ```bash
-git checkout tp3
-make test-api
+make run-app

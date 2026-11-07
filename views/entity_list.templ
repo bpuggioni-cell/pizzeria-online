@@ -1,0 +1,45 @@
+package views
+
+import (
+	"fmt"
+	"tpmod/internal/db"
+)
+
+templ EntityList(pizzas []db.Pizza) {
+	<section>
+		<h2>Menú de Pizzas</h2>
+		if len(pizzas) == 0 {
+			<p>No hay pizzas registradas todavía.</p>
+		} else {
+			<figure>
+				<table>
+					<thead>
+						<tr>
+							<th>ID</th>
+							<th>Nombre</th>
+							<th>Descripción</th>
+							<th>Precio</th>
+							<th>Acciones</th>
+						</tr>
+					</thead>
+					<tbody>
+						for _, p := range pizzas {
+							<tr>
+								<td>{ fmt.Sprintf("%d", p.ID) }</td>
+								<td><strong>{ p.Nombre }</strong></td>
+								<td>{ p.Descripcion }</td>
+								<td>${ p.Precio }</td>
+								<td>
+									<!-- Formulario POST independiente para eliminar por ID -->
+									<form action={ templ.SafeURL(fmt.Sprintf("/pizzas/delete/%d", p.ID)) } method="POST" style="margin: 0;">
+										<button type="submit" class="outline secondary" style="padding: 0.25rem 0.5rem; font-size: 0.8rem;">Eliminar</button>
+									</form>
+								</td>
+							</tr>
+						}
+					</tbody>
+				</table>
+			</figure>
+		}
+	</section>
+}
