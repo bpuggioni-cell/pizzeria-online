@@ -6,7 +6,7 @@ import (
 )
 
 templ EntityList(pizzas []db.Pizza) {
-	<section>
+	<section id="pizzas-list">
 		<h2>Menú de Pizzas</h2>
 		if len(pizzas) == 0 {
 			<p>No hay pizzas registradas todavía.</p>
@@ -30,10 +30,16 @@ templ EntityList(pizzas []db.Pizza) {
 								<td>{ p.Descripcion }</td>
 								<td>${ p.Precio }</td>
 								<td>
-									<!-- Formulario POST independiente para eliminar por ID -->
-									<form action={ templ.SafeURL(fmt.Sprintf("/pizzas/delete/%d", p.ID)) } method="POST" style="margin: 0;">
-										<button type="submit" class="outline secondary" style="padding: 0.25rem 0.5rem; font-size: 0.8rem;">Eliminar</button>
-									</form>
+									<button 
+										hx-delete={ fmt.Sprintf("/pizzas/%d", p.ID) }
+										hx-target="closest tr"
+										hx-swap="outerHTML"
+										hx-confirm={ fmt.Sprintf("¿Estás seguro de que querés eliminar la pizza %s?", p.Nombre) }
+										class="outline secondary" 
+										style="padding: 0.25rem 0.5rem; font-size: 0.8rem;"
+									>
+										Eliminar
+									</button>
 								</td>
 							</tr>
 						}

@@ -3,7 +3,12 @@ package views
 templ EntityForm() {
     <section>
         <h2>Registrar Nueva Pizza</h2>
-        <form action="/pizzas" method="POST">
+        <form 
+            hx-post="/pizzas" 
+			hx-target="#pizzas-list" 
+			hx-swap="outerHTML"
+			hx-on::after-request="if(event.detail.successful) this.reset()"
+        >
             <fieldset>
                 <label for="nombre">
                     Nombre de la Pizza

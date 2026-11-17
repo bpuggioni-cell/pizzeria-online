@@ -38,7 +38,7 @@ func (s *Server) handleHome(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-// HANDLER PARA CREAR PIZZA (POST /pizzas) - Tradicional por formulario SSR
+// HANDLER PARA CREAR PIZZA (POST /pizzas) - Reactivo con HTMX
 func (s *Server) handleCreatePizzaForm(w http.ResponseWriter, r *http.Request) {
 	if err := r.ParseForm(); err != nil {
 		http.Error(w, "Error al procesar el formulario", http.StatusBadRequest)
@@ -74,12 +74,20 @@ func (s *Server) handleCreatePizzaForm(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Redirigir de vuelta a la página principal para ver la lista actualizada
-	http.Redirect(w, r, "/", http.StatusSeeOther)
+	// Obtener la lista actualizada de pizzas
+	pizzas, err := s.db.ListPizzas(r.Context())
+	if err != nil {
+		log.Println("[ERROR ListPizzas]:", err)
+		http.Error(w, "Error al obtener las pizzas actualizadas", http.StatusInternalServerError)
+		return
+	}
+
+	// Devolver solo el fragmento HTML de la lista (outerHTML reemplazará #pizzas-list)
+	views.EntityList(pizzas).Render(r.Context(), w)
 }
 
-// POST /pizzas/delete/{id} - Eliminar pizza mediante formulario SSR
-func (s *Server) handleDeletePizzaForm(w http.ResponseWriter, r *http.Request) {
+// DELETE /pizzas/{id} - Eliminar pizza reactivamente con HTMX
+func (s *Server) handleDeletePizza(w http.ResponseWriter, r *http.Request) {
 	idStr := r.PathValue("id")
 	id, err := strconv.ParseInt(idStr, 10, 32)
 	if err != nil {
@@ -94,8 +102,8 @@ func (s *Server) handleDeletePizzaForm(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Redirigir de vuelta a la página principal para ver la lista actualizada
-	http.Redirect(w, r, "/", http.StatusSeeOther)
+	// Devolver respuesta vacía con 200 OK para que HTMX elimine el <tr> del DOM
+	w.WriteHeader(http.StatusOK)
 }
 
 func main() {
@@ -124,7 +132,7 @@ func main() {
 	// 4. Registrar Rutas SSR (Adiós JSON, hola HTML desde Go)
 	http.HandleFunc("GET /", server.handleHome)
 	http.HandleFunc("POST /pizzas", server.handleCreatePizzaForm)
-	http.HandleFunc("POST /pizzas/delete/{id}", server.handleDeletePizzaForm)
+	http.HandleFunc("DELETE /pizzas/{id}", server.handleDeletePizza)
 
 	// 5. Iniciar servidor HTTP
 	port := ":8080"

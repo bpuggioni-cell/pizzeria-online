@@ -26,7 +26,7 @@ func EntityForm() templ.Component {
 		}
 		ctx = templ.InitializeContext(ctx)
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<section><h2>Registrar Nueva Pizza</h2><form action=\"/pizzas\" method=\"POST\"><fieldset><label for=\"nombre\">Nombre de la Pizza <input type=\"text\" id=\"nombre\" name=\"nombre\" placeholder=\"Ej: Muzzarella Especial\" required></label> <label for=\"descripcion\">Descripción <input type=\"text\" id=\"descripcion\" name=\"descripcion\" placeholder=\"Ej: Salsa, muzzarella, morrones y aceitunas\"></label> <label for=\"precio\">Precio ($) <input type=\"number\" id=\"precio\" name=\"precio\" step=\"0.01\" placeholder=\"Ej: 9500\" required></label></fieldset><button type=\"submit\">Guardar Pizza</button></form></section>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<section><h2>Registrar Nueva Pizza</h2><form hx-post=\"/pizzas\" hx-target=\"#pizzas-list\" hx-swap=\"outerHTML\" hx-on::after-request=\"if(event.detail.successful) this.reset()\"><fieldset><label for=\"nombre\">Nombre de la Pizza <input type=\"text\" id=\"nombre\" name=\"nombre\" placeholder=\"Ej: Muzzarella Especial\" required></label> <label for=\"descripcion\">Descripción <input type=\"text\" id=\"descripcion\" name=\"descripcion\" placeholder=\"Ej: Salsa, muzzarella, morrones y aceitunas\"></label> <label for=\"precio\">Precio ($) <input type=\"number\" id=\"precio\" name=\"precio\" step=\"0.01\" placeholder=\"Ej: 9500\" required></label></fieldset><button type=\"submit\">Guardar Pizza</button></form></section>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
